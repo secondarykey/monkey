@@ -1,6 +1,8 @@
 package lexer
 
 import (
+	"strings"
+
 	"interpreter/token"
 )
 
@@ -103,8 +105,14 @@ func (lx *Lexer) NextToken() *token.Token {
 				tok = token.New(token.Bang, val)
 			}
 		}
+	case '"':
+
+		val := lx.readString()
+		tok = token.New(token.String, val)
+		return tok
 
 	default:
+		//文字列の場合
 		if isLetter(lx.ch) {
 			ident := lx.readIdentifer()
 			tok = token.NewKeywordToken(ident)
@@ -112,9 +120,16 @@ func (lx *Lexer) NextToken() *token.Token {
 		} else if isDigit(lx.ch) {
 			//数値の場合
 			num := lx.readNumber()
-			tok = token.New(token.Int, num)
+
+			typ := token.Int
+			if strings.Index(num, ".") != -1 {
+				typ = token.Real
+			}
+
+			tok = token.New(token.TokenType(typ), num)
 			return tok
 		} else {
+			//不明
 			tok = token.New(token.Illegal, val)
 		}
 	}
@@ -141,6 +156,22 @@ func (lx *Lexer) readIdentifer() string {
 	return lx.input[start:lx.position]
 }
 
+func (lx *Lexer) readString() string {
+
+	//" のはずなので1つ進める
+	lx.readChar()
+
+	start := lx.position
+	for isString(lx.ch) {
+		lx.readChar()
+	}
+
+	end := lx.position
+	//1つすすめる
+	lx.readChar()
+	return lx.input[start:end]
+}
+
 func (lx *Lexer) readNumber() string {
 	start := lx.position
 	for isDigit(lx.ch) {
@@ -156,11 +187,16 @@ func (lx *Lexer) skip() {
 	}
 }
 
+//TODO 途中からの数値をOKにする
 func isLetter(ch byte) bool {
 	return 'a' <= ch && 'z' >= ch ||
 		'A' <= ch && 'Z' >= ch || ch == '_'
 }
 
+func isString(ch byte) bool {
+	return '"' != ch
+}
+
 func isDigit(ch byte) bool {
-	return '0' <= ch && '9' >= ch
+	return '0' <= ch && '9' >= ch || '.' == ch
 }
