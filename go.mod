@@ -1,4 +1,4 @@
-module interpreter
+module monkey
 
 go 1.14
 

@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/user"
 
-	"interpreter/repl"
+	"monkey/repl"
 )
 
 func main() {

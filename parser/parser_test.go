@@ -3,9 +3,9 @@ package parser_test
 import (
 	"testing"
 
-	"interpreter/ast"
-	"interpreter/lexer"
-	"interpreter/parser"
+	"monkey/ast"
+	"monkey/lexer"
+	"monkey/parser"
 )
 
 func TestParseLetStatement(t *testing.T) {

@@ -3,8 +3,8 @@ package lexer_test
 import (
 	"testing"
 
-	"interpreter/lexer"
-	"interpreter/token"
+	"monkey/lexer"
+	"monkey/token"
 )
 
 func TestNextToken(t *testing.T) {

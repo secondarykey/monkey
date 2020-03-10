@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	"interpreter/lexer"
-	"interpreter/token"
+	"monkey/lexer"
+	"monkey/token"
 )
 
 const Prompt = ">> "

@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"interpreter/token"
+	"monkey/token"
 )
 
 type LetStatement struct {

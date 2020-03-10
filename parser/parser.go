@@ -3,9 +3,9 @@ package parser
 import (
 	"fmt"
 
-	"interpreter/ast"
-	"interpreter/lexer"
-	"interpreter/token"
+	"monkey/ast"
+	"monkey/lexer"
+	"monkey/token"
 )
 
 type Parser struct {
