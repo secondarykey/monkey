@@ -92,14 +92,14 @@ func (lx *Lexer) NextToken() *token.Token {
 			}
 		} else if lx.ch == '=' {
 			if nx == '=' {
-				tok = token.New(token.Eq, newVal)
+				tok = token.New(token.Equal, newVal)
 				lx.readChar()
 			} else {
 				tok = token.New(token.Assign, val)
 			}
 		} else if lx.ch == '!' {
 			if nx == '=' {
-				tok = token.New(token.NotEq, newVal)
+				tok = token.New(token.NotEqual, newVal)
 				lx.readChar()
 			} else {
 				tok = token.New(token.Bang, val)
@@ -107,26 +107,29 @@ func (lx *Lexer) NextToken() *token.Token {
 		}
 	case '"':
 
+		//文字列として設定
 		val := lx.readString()
 		tok = token.New(token.String, val)
 		return tok
 
 	default:
-		//文字列の場合
 		if isLetter(lx.ch) {
+
+			//文字(変数等)の場合
 			ident := lx.readIdentifer()
 			tok = token.NewKeywordToken(ident)
 			return tok
+
 		} else if isDigit(lx.ch) {
+
 			//数値の場合
 			num := lx.readNumber()
-
 			typ := token.Int
 			if strings.Index(num, ".") != -1 {
 				typ = token.Real
 			}
 
-			tok = token.New(token.TokenType(typ), num)
+			tok = token.New(typ, num)
 			return tok
 		} else {
 			//不明
@@ -187,16 +190,24 @@ func (lx *Lexer) skip() {
 	}
 }
 
-//TODO 途中からの数値をOKにする
 func isLetter(ch byte) bool {
+	if ch == 0 {
+		return false
+	}
 	return 'a' <= ch && 'z' >= ch ||
 		'A' <= ch && 'Z' >= ch || ch == '_'
 }
 
 func isString(ch byte) bool {
-	return '"' != ch
+	if '"' == ch || ch == 0 {
+		return false
+	}
+	return true
 }
 
 func isDigit(ch byte) bool {
+	if ch == 0 {
+		return false
+	}
 	return '0' <= ch && '9' >= ch || '.' == ch
 }

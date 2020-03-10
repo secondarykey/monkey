@@ -23,6 +23,7 @@ var keywords = map[string]TokenType{
 	"return": Return,
 }
 
+// keywordになかったらIdentを生成
 func NewKeywordToken(val string) *Token {
 	if typ, ok := keywords[val]; ok {
 		return New(typ, val)
