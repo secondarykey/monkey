@@ -56,6 +56,8 @@ func (p *Parser) parseStatement() (ast.Statement, error) {
 	switch p.currentToken.Type {
 	case token.Let:
 		return p.parseLetStatement()
+	case token.Return:
+		return p.parseReturnStatement()
 	default:
 	}
 
@@ -109,4 +111,17 @@ func (p *Parser) peekTokenIs(t token.TokenType) bool {
 		return true
 	}
 	return false
+}
+
+func (p *Parser) parseReturnStatement() (*ast.ReturnStatement, error) {
+	stmt := &ast.ReturnStatement{Token: p.currentToken}
+
+	p.nextToken()
+
+	//TODO 読み飛ばしているだけ
+	for !p.currentTokenIs(token.SemiColon) {
+		p.nextToken()
+	}
+
+	return stmt, nil
 }
